@@ -1,6 +1,5 @@
 import React from "react";
 import Tile from "../Components/Tile";
-import "./StoryGrid.css";
 
 const StoryGrid = ({ articles }) => {
   return (
