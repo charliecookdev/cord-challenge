@@ -1,25 +1,34 @@
-import logo from './logo.svg';
+import { useEffect, useState } from "react";
+import StoryGrid from "./Containers/StoryGrid";
 import './App.css';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  const [articles, setArticles] = useState([]);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchNewsArticles = async () => {
+      try {
+        // Obviously wouldn't have an API key exposed like this in a front end app but used for demo purposes
+        const response = await fetch(
+          "https://gnews.io/api/v4/top-headlines?lang=en&token=c980452d8fe909b1186676944b80e337"
+        );
+        const { articles } = await response.json();
+
+        setArticles(articles);
+      } catch (error) {
+        setError(error)
+      }
+    };
+
+    fetchNewsArticles();
+  }, []);
+
+  if (error) {
+    return <h1>Oops looks like something went wrong: {error}</h1>
+  }
+
+  return <StoryGrid articles={articles} />;
 }
 
 export default App;
